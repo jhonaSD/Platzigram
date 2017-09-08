@@ -2,8 +2,12 @@ var express = require('express'); //require busca dentro de los modulos
 
 var app = express();//express permite hacer servidores web
 
+app.set('view engine', 'pug'); // cuando le entreguemos vistas al usuario, utilice pug para renderizarlos
+
+app.use(express.static('public')) //indica al servidor web que cualquier usuario va a poder acceder a la carpeta public
+
 app.get('/', function(req, res){
-	res.send('Hola mundo') //envia al cliente
+	res.render('index') //envia al cliente
 });
 
 app.listen(3000, function(err){

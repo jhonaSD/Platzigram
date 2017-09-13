@@ -7,15 +7,15 @@ app.set('view engine', 'pug'); // cuando le entreguemos vistas al usuario, utili
 app.use(express.static('public')) //indica al servidor web que cualquier usuario va a poder acceder a la carpeta public
 
 app.get('/', function(req, res){
-	res.render('index') //envia al cliente
+	res.render('index', { title: 'Platzigram' }) //envia al cliente
 });
 
 app.get('/signup', function(req, res){
-	res.render('index') //envia al cliente
+	res.render('index', { title: 'Platzigram - Signup' }) //envia al cliente
 });
 
 app.get('/signin', function(req, res){
-	res.render('index') //envia al cliente
+	res.render('index', { title: 'Platzigram - Signin' }) //envia al cliente
 });
 
 app.listen(3000, function(err){

@@ -4,6 +4,7 @@ var rename = require('gulp-rename');
 var babel = require('babelify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
+var watchify = require('watchify');
 
 //definir una tarea para gulp con task(define una nueva tarea)
 gulp.task('styles', function(){
@@ -21,13 +22,36 @@ gulp.task('assets', function(){
 		.pipe(gulp.dest('public'));
 })
 
-gulp.task('scripts', function(){
-	browserify('./src/index.js')
-		.transform(babel)
-		.bundle()
-		.pipe(source('index.js')) //source transforma el resultado de bundle() por browserify para que lo entiende gulp
-		.pipe(rename('app.js'))
-		.pipe(gulp.dest('public'));
-})
+function compile(watch){
+	var bundle = watchify(browserify('./src/index.js'))
 
-gulp.task('default', ['styles', 'assets', 'scripts'])
+	function rebundle(){
+		bundle	
+			.transform(babel)
+			.bundle()
+			.on('error', function(error){ console.log(err); this.emit('end') })
+			.pipe(source('index.js')) //source transforma el resultado de bundle() por browserify para que lo entiende gulp
+			.pipe(rename('app.js'))
+			.pipe(gulp.dest('public'));
+	}
+
+	if(watch){
+		bundle.on('update', function(){
+			console.log('-->Bundling...');
+			rebundle();
+		});
+	}
+
+	rebundle();
+}
+
+
+gulp.task('build', function(){
+	return compile();
+});
+
+gulp.task('watch', function(){
+	return compile(true);
+});
+
+gulp.task('default', ['styles', 'assets', 'build'])

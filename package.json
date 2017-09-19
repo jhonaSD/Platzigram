@@ -13,7 +13,10 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.15.4",
+    "intl": "^1.2.5",
+    "intl-relativeformat": "^2.0.0",
     "materialize-css": "^0.100.2",
+    "moment": "^2.18.1",
     "page": "^1.7.1",
     "pug": "^2.0.0-rc.4",
     "yo-yo": "^1.4.1"

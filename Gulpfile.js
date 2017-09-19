@@ -27,7 +27,7 @@ function compile(watch){
 
 	function rebundle(){
 		bundle	
-			.transform(babel)
+			.transform(babel, {presets: ["es2015"]})
 			.bundle()
 			.on('error', function(error){ console.log(err); this.emit('end') })
 			.pipe(source('index.js')) //source transforma el resultado de bundle() por browserify para que lo entiende gulp

@@ -23,23 +23,24 @@ gulp.task('assets', function(){
 })
 
 function compile(watch){
-	var bundle = watchify(browserify('./src/index.js'))
-
-	function rebundle(){
-		bundle	
-			.transform(babel, {presets: ["es2015"]})
-			.bundle()
-			.on('error', function(error){ console.log(err); this.emit('end') })
-			.pipe(source('index.js')) //source transforma el resultado de bundle() por browserify para que lo entiende gulp
-			.pipe(rename('app.js'))
-			.pipe(gulp.dest('public'));
-	}
+	var bundle = browserify('./src/index.js')
 
 	if(watch){
 		bundle.on('update', function(){
 			console.log('-->Bundling...');
 			rebundle();
 		});
+	}
+
+	function rebundle(){
+		bundle = watchify(bundle);
+		bundle	
+			.transform(babel, {presets: ["es2015"], plugins: ['syntax-async-functions', 'transform-regenerator']})
+			.bundle()
+			.on('error', function(error){ console.log(err); this.emit('end') })
+			.pipe(source('index.js')) //source transforma el resultado de bundle() por browserify para que lo entiende gulp
+			.pipe(rename('app.js'))
+			.pipe(gulp.dest('public'));
 	}
 
 	rebundle();
